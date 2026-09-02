@@ -84,10 +84,10 @@ export function MusicPlayer() {
       {/* Now Playing */}
       <div className="flex-1 flex flex-col items-center justify-center p-6">
         {/* Album art */}
-        <div
-          className="w-40 h-40 rounded-2xl shadow-lg flex items-center justify-center mb-6 transition-all duration-500"
+        <div            className="w-40 h-40 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500"
           style={{
             background: `linear-gradient(135deg, ${track.color}, ${track.color}88)`,
+            boxShadow: `0 8px 24px ${track.color}50, inset 0 1px 0 rgba(255,255,255,0.2)`,
             transform: isPlaying ? "scale(1)" : "scale(0.95)",
           }}
         >
@@ -95,15 +95,13 @@ export function MusicPlayer() {
         </div>
 
         {/* Track info */}
-        <div className="text-center mb-4">
-          <div className="text-[18px] font-medium text-[#202124]">{track.title}</div>
-          <div className="text-[13px] text-[#5f6368] mt-0.5">{track.artist} · {track.album}</div>
+        <div className="text-center mb-4">            <div className="text-[18px] font-medium text-[#1D1D1F]">{track.title}</div>
+          <div className="text-[13px] text-[#86868B] mt-0.5">{track.artist} · {track.album}</div>
         </div>
 
         {/* Progress bar */}
         <div className="w-full max-w-[280px]">
-          <div
-            className="w-full h-1.5 bg-[#e8eaed] rounded-full cursor-pointer"
+          <div              className="w-full h-1.5 bg-[#E5E5EA] rounded-full cursor-pointer"
             onClick={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
               const x = e.clientX - rect.left;
@@ -111,21 +109,21 @@ export function MusicPlayer() {
             }}
           >
             <div
-              className="h-full bg-[#1A73E8] rounded-full relative transition-all"
+              className="h-full bg-[#FF2D55] rounded-full relative transition-all"
               style={{ width: `${(progress / track.duration) * 100}%` }}
             >
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#1A73E8] rounded-full shadow opacity-0 hover:opacity-100 transition-opacity" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#FF2D55] rounded-full shadow opacity-0 hover:opacity-100 transition-opacity" />
             </div>
           </div>
           <div className="flex justify-between text-[11px] text-[#5f6368] mt-1" style={{ fontVariantNumeric: "tabular-nums" }}>
             <span>{formatTime(progress)}</span>
-            <span>{formatTime(track.duration)}</span>
+            <span className="text-[#AEAEB2]">{formatTime(track.duration)}</span>
           </div>
         </div>
 
         {/* Controls */}
         <div className="flex items-center gap-4 mt-4">
-          <button onClick={() => setShuffle(!shuffle)} className={`p-1.5 rounded-full transition-colors ${shuffle ? "text-[#1A73E8]" : "text-[#5f6368] hover:text-[#202124]"}`}>
+          <button onClick={() => setShuffle(!shuffle)} className={`p-1.5 rounded-full transition-colors ${shuffle ? "text-[#FF2D55]" : "text-[#86868B] hover:text-[#1D1D1F]"}`}>
             <Shuffle className="w-4 h-4" />
           </button>
           <button onClick={prevTrack} className="p-1.5 rounded-full text-[#202124] hover:bg-[#f1f3f4] transition-colors">
@@ -133,14 +131,14 @@ export function MusicPlayer() {
           </button>
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="w-12 h-12 rounded-full bg-[#202124] text-white flex items-center justify-center hover:bg-[#3C4043] transition-colors shadow-md"
+            className="w-12 h-12 rounded-full bg-[#FF2D55] text-white flex items-center justify-center hover:bg-[#FF375F] transition-colors shadow-md"
           >
             {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
           </button>
           <button onClick={nextTrack} className="p-1.5 rounded-full text-[#202124] hover:bg-[#f1f3f4] transition-colors">
             <SkipForward className="w-5 h-5" />
           </button>
-          <button onClick={() => setRepeat(!repeat)} className={`p-1.5 rounded-full transition-colors ${repeat ? "text-[#1A73E8]" : "text-[#5f6368] hover:text-[#202124]"}`}>
+          <button onClick={() => setRepeat(!repeat)} className={`p-1.5 rounded-full transition-colors ${repeat ? "text-[#FF2D55]" : "text-[#86868B] hover:text-[#1D1D1F]"}`}>
             <Repeat className="w-4 h-4" />
           </button>
         </div>
@@ -173,26 +171,24 @@ export function MusicPlayer() {
             className={`w-full flex items-center gap-3 px-3 py-2 text-left transition-colors ${
               i === currentTrack ? "bg-[#E8F0FE]" : "hover:bg-[#f8f9fa]"
             }`}
-          >
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
-              style={{ background: t.color }}
+          >            <div className="w-8 h-8 rounded-[6px] flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+              style={{ background: t.color, boxShadow: `0 2px 6px ${t.color}40, inset 0 0.5px 0 rgba(255,255,255,0.2)` }}
             >
               {i === currentTrack && isPlaying ? "♫" : i + 1}
             </div>
             <div className="flex-1 min-w-0">
-              <div className={`text-[13px] truncate ${i === currentTrack ? "text-[#1A73E8] font-medium" : "text-[#202124]"}`}>
+              <div className={`text-[13px] truncate ${i === currentTrack ? "text-[#FF2D55] font-medium" : "text-[#1D1D1F]"}`}>
                 {t.title}
               </div>
-              <div className="text-[11px] text-[#5f6368] truncate">{t.artist}</div>
+              <div className="text-[11px] text-[#86868B] truncate">{t.artist}</div>
             </div>
             <button
               onClick={(e) => { e.stopPropagation(); toggleLike(t.id); }}
               className="p-1"
             >
-              <Heart className={`w-3.5 h-3.5 ${liked.has(t.id) ? "fill-red-400 text-red-400" : "text-[#dadce0]"}`} />
+              <Heart className={`w-3.5 h-3.5 ${liked.has(t.id) ? "fill-[#FF2D55] text-[#FF2D55]" : "text-[#C7C7CC]"}`} />
             </button>
-            <span className="text-[11px] text-[#5f6368] shrink-0" style={{ fontVariantNumeric: "tabular-nums" }}>
+            <span className="text-[11px] text-[#86868B] shrink-0" style={{ fontVariantNumeric: "tabular-nums" }}>
               {formatTime(t.duration)}
             </span>
           </button>

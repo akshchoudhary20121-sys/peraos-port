@@ -247,7 +247,7 @@ export function Terminal() {
   return (
     <div
       className="flex flex-col h-full font-mono text-[13px] leading-relaxed"
-      style={{ background: "#1a1a2e", color: "#e4e4e7" }}
+      style={{ background: "#1E1E1E", color: "#CCCCCC" }}
       onClick={() => inputRef.current?.focus()}
     >
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-3">

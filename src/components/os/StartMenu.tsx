@@ -45,6 +45,23 @@ const APP_ORDER = [
   "about",
 ];
 
+function getAppColor(id: string): string {
+  const colors: Record<string, string> = {
+    browser: "linear-gradient(135deg, #64D2FF, #0A84FF)",
+    files: "linear-gradient(135deg, #8E8E93, #48484A)",
+    terminal: "linear-gradient(135deg, #3A3A3C, #1C1C1E)",
+    calculator: "linear-gradient(135deg, #636366, #1C1C1E)",
+    notes: "linear-gradient(135deg, #FFD60A, #FF9F0A)",
+    settings: "linear-gradient(135deg, #8E8E93, #48484A)",
+    music: "linear-gradient(135deg, #FF375F, #FF2D55)",
+    weather: "linear-gradient(135deg, #5AC8FA, #007AFF)",
+    clock: "linear-gradient(135deg, #5AC8FA, #007AFF)",
+    monitor: "linear-gradient(135deg, #30D158, #28A745)",
+    about: "linear-gradient(135deg, #BF5AF2, #8944AB)",
+  };
+  return colors[id] || "linear-gradient(135deg, #8E8E93, #48484A)";
+}
+
 export function StartMenu() {
   const { startMenuOpen, setStartMenuOpen, openWindow } = useWindowManager();
   const [search, setSearch] = useState("");
@@ -95,34 +112,33 @@ export function StartMenu() {
     <div className="fixed inset-0 z-[9998]" onClick={() => setStartMenuOpen(false)}>
       <div
         ref={menuRef}
-        className="absolute left-4 top-12 w-[340px] rounded-2xl overflow-hidden"
+        className="absolute left-4 top-[34px] w-[340px] rounded-[14px] overflow-hidden"
         style={{
-          background: "rgba(255,255,255,0.92)",
-          backdropFilter: "blur(40px) saturate(200%)",
-          WebkitBackdropFilter: "blur(40px) saturate(200%)",
-          boxShadow: "0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)",
-          border: "1px solid rgba(0,0,0,0.06)",
-          animation: "startMenuIn 0.2s cubic-bezier(0.16,1,0.3,1)",
+          background: "rgba(255,255,255,0.88)",
+          backdropFilter: "blur(60px) saturate(200%)",
+          WebkitBackdropFilter: "blur(60px) saturate(200%)",
+          boxShadow: "0 12px 48px rgba(0,0,0,0.15), 0 2px 10px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.06)",
+          animation: "startMenuIn 0.18s cubic-bezier(0.16,1,0.3,1)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search */}
-        <div className="p-3 pb-2">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-[#f1f3f4]">
-            <Search className="w-4 h-4 text-[#5f6368] shrink-0" />
+        <div className="p-2.5 pb-1.5">
+          <div className="flex items-center gap-2 px-3 py-[7px] rounded-[9px]" style={{ background: "rgba(0,0,0,0.06)" }}>
+            <Search className="w-[14px] h-[14px] text-[#86868B] shrink-0" />
             <input
               ref={inputRef}
               type="text"
-              placeholder="Search apps..."
+              placeholder="Search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 bg-transparent text-[13px] text-[#202124] placeholder-[#9aa0a6] outline-none"
+              className="flex-1 bg-transparent text-[13px] text-[#1D1D1F] placeholder-[#86868B] outline-none"
             />
           </div>
         </div>
 
         {/* App Grid */}
-        <div className="px-3 pb-3 grid grid-cols-4 gap-1">
+        <div className="px-3 pb-2.5 pt-1 grid grid-cols-4 gap-0.5">
           {filteredApps.map((id) => {
             const app = APP_REGISTRY[id];
             const Icon = ICON_MAP[app.icon] ?? Info;
@@ -130,14 +146,18 @@ export function StartMenu() {
               <button
                 key={id}
                 onClick={() => openWindow(id)}
-                className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-black/5 transition-colors"
+                className="flex flex-col items-center gap-[5px] p-2.5 rounded-[10px] hover:bg-black/5 active:bg-black/8 transition-colors"
               >
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: getAppColor(id) }}
+                <div
+                  className="w-10 h-10 rounded-[10px] flex items-center justify-center"
+                  style={{
+                    background: getAppColor(id),
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.15), inset 0 0.5px 0 rgba(255,255,255,0.2)",
+                  }}
                 >
-                  <Icon className="w-5 h-5 text-white" />
+                  <Icon className="w-[20px] h-[20px] text-white" strokeWidth={1.7} />
                 </div>
-                <span className="text-[11px] text-[#202124] leading-tight text-center">
+                <span className="text-[10.5px] text-[#1D1D1F] leading-tight text-center">
                   {app.title}
                 </span>
               </button>
@@ -146,35 +166,24 @@ export function StartMenu() {
         </div>
 
         {/* Footer */}
-        <div className="px-3 py-2 border-t border-black/5 flex items-center justify-between">
-          <div className="flex items-center gap-2 px-2 py-1 rounded-lg">
-            <div className="w-7 h-7 rounded-full bg-[#e8eaed] flex items-center justify-center">
-              <User className="w-4 h-4 text-[#5f6368]" />
+        <div className="px-3 py-2 border-t border-black/[0.06] flex items-center justify-between">
+          <div className="flex items-center gap-2 px-2 py-1 rounded-[8px]">
+            <div
+              className="w-7 h-7 rounded-full flex items-center justify-center"
+              style={{
+                background: "linear-gradient(135deg, #8E8E93, #636366)",
+                boxShadow: "inset 0 0.5px 0 rgba(255,255,255,0.2)",
+              }}
+            >
+              <User className="w-[14px] h-[14px] text-white" />
             </div>
-            <span className="text-[12px] text-[#202124] font-medium">Guest</span>
+            <span className="text-[12px] text-[#1D1D1F] font-medium">Guest</span>
           </div>
-          <button className="p-2 rounded-lg hover:bg-black/5 transition-colors">
-            <Power className="w-4 h-4 text-[#5f6368]" />
+          <button className="p-1.5 rounded-[8px] hover:bg-black/5 active:bg-black/8 transition-colors">
+            <Power className="w-[14px] h-[14px] text-[#86868B]" />
           </button>
         </div>
       </div>
     </div>
   );
-}
-
-function getAppColor(id: string): string {
-  const colors: Record<string, string> = {
-    browser: "linear-gradient(135deg, #4285F4, #5C9CFF)",
-    files: "linear-gradient(135deg, #5F6368, #80868B)",
-    terminal: "linear-gradient(135deg, #202124, #3C4043)",
-    calculator: "linear-gradient(135deg, #4285F4, #34A853)",
-    notes: "linear-gradient(135deg, #FBBC05, #F9AB00)",
-    settings: "linear-gradient(135deg, #5F6368, #9AA0A6)",
-    music: "linear-gradient(135deg, #EA4335, #FF6D64)",
-    weather: "linear-gradient(135deg, #4285F4, #34A853)",
-    clock: "linear-gradient(135deg, #4285F4, #1A73E8)",
-    monitor: "linear-gradient(135deg, #34A853, #1E8E3E)",
-    about: "linear-gradient(135deg, #4285F4, #EA4335)",
-  };
-  return colors[id] || "linear-gradient(135deg, #5F6368, #80868B)";
 }

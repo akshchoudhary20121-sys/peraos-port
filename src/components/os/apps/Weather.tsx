@@ -60,16 +60,16 @@ export function Weather() {
   const [data] = useState(WEATHER_DATA);
 
   return (
-    <div className="h-full bg-gradient-to-b from-[#E8F0FE] to-white overflow-y-auto">
+    <div className="h-full bg-gradient-to-b from-[#E3F0FF] to-white overflow-y-auto">
       {/* Current Weather */}
       <div className="p-6 text-center">
-        <div className="text-[14px] text-[#5f6368] font-medium mb-1">{data.city}</div>
+        <div className="text-[14px] text-[#86868B] font-medium mb-1">{data.city}</div>
         <div className="flex items-center justify-center gap-3">
-          <Sun className="w-12 h-12 text-[#FBBC05]" />
-          <span className="text-[56px] font-light text-[#202124] leading-none">{data.temp}°</span>
+          <Sun className="w-12 h-12 text-[#FF9F0A]" />
+          <span className="text-[56px] font-extralight text-[#1D1D1F] leading-none tracking-[-0.04em]">{data.temp}°</span>
         </div>
-        <div className="text-[14px] text-[#5f6368] mt-1">{data.condition}</div>
-        <div className="text-[13px] text-[#5f6368] mt-0.5">
+        <div className="text-[14px] text-[#86868B] mt-1">{data.condition}</div>
+        <div className="text-[13px] text-[#86868B] mt-0.5">
           H:{data.high}° L:{data.low}°
         </div>
       </div>
@@ -77,13 +77,13 @@ export function Weather() {
       {/* Hourly */}
       <div className="px-4 pb-4">
         <div className="rounded-2xl bg-white/80 border border-[#e8eaed] p-4">
-          <div className="text-[12px] font-medium text-[#5f6368] mb-3">Hourly Forecast</div>
+          <div className="text-[12px] font-semibold text-[#86868B] mb-3">Hourly Forecast</div>
           <div className="flex gap-1 overflow-x-auto pb-1">
             {HOURLY.map((h, i) => (
               <div key={i} className="flex flex-col items-center gap-1.5 min-w-[48px] py-2 px-1">
-                <span className="text-[11px] text-[#5f6368]">{h.hour}</span>
-                <WeatherIcon type={h.icon} className="w-5 h-5 text-[#5f6368]" />
-                <span className="text-[13px] text-[#202124] font-medium">{h.temp}°</span>
+                <span className="text-[11px] text-[#86868B]">{h.hour}</span>
+                <WeatherIcon type={h.icon} className="w-5 h-5 text-[#86868B]" />
+                <span className="text-[13px] text-[#1D1D1F] font-medium">{h.temp}°</span>
               </div>
             ))}
           </div>
@@ -93,13 +93,13 @@ export function Weather() {
       {/* 5-day Forecast */}
       <div className="px-4 pb-4">
         <div className="rounded-2xl bg-white/80 border border-[#e8eaed] p-4">
-          <div className="text-[12px] font-medium text-[#5f6368] mb-3">5-Day Forecast</div>
+          <div className="text-[12px] font-semibold text-[#86868B] mb-3">5-Day Forecast</div>
           {FORECAST.map((day, i) => (
             <div key={i} className={`flex items-center gap-3 py-2.5 ${i < FORECAST.length - 1 ? "border-b border-[#f1f3f4]" : ""}`}>
-              <span className="text-[13px] text-[#202124] w-10 font-medium">{day.day}</span>
-              <WeatherIcon type={day.icon} className="w-5 h-5 text-[#5f6368]" />
-              <span className="text-[12px] text-[#5f6368] flex-1">{day.condition}</span>
-              <span className="text-[13px] text-[#202124]">{day.high}°</span>
+              <span className="text-[13px] text-[#1D1D1F] w-10 font-medium">{day.day}</span>
+              <WeatherIcon type={day.icon} className="w-5 h-5 text-[#86868B]" />
+              <span className="text-[12px] text-[#86868B] flex-1">{day.condition}</span>
+              <span className="text-[13px] text-[#1D1D1F]">{day.high}°</span>
               <div className="w-16 h-1.5 rounded-full bg-[#e8eaed] overflow-hidden">
                 <div
                   className="h-full rounded-full"
@@ -110,7 +110,7 @@ export function Weather() {
                   }}
                 />
               </div>
-              <span className="text-[13px] text-[#5f6368]">{day.low}°</span>
+              <span className="text-[13px] text-[#86868B]">{day.low}°</span>
             </div>
           ))}
         </div>
@@ -119,7 +119,7 @@ export function Weather() {
       {/* Details */}
       <div className="px-4 pb-6">
         <div className="rounded-2xl bg-white/80 border border-[#e8eaed] p-4">
-          <div className="text-[12px] font-medium text-[#5f6368] mb-3">Details</div>
+          <div className="text-[12px] font-semibold text-[#86868B] mb-3">Details</div>
           <div className="grid grid-cols-2 gap-3">
             {[
               { icon: Thermometer, label: "Feels Like", value: `${data.feelsLike}°C` },
@@ -127,11 +127,11 @@ export function Weather() {
               { icon: Wind, label: "Wind", value: `${data.wind} km/h` },
               { icon: Eye, label: "Visibility", value: `${data.visibility} km` },
             ].map((item) => (
-              <div key={item.label} className="flex items-center gap-2 p-2.5 rounded-xl bg-[#f8f9fa]">
-                <item.icon className="w-4 h-4 text-[#5f6368]" />
+              <div key={item.label} className="flex items-center gap-2 p-2.5 rounded-xl bg-white/80">
+                <item.icon className="w-4 h-4 text-[#86868B]" />
                 <div>
-                  <div className="text-[11px] text-[#5f6368]">{item.label}</div>
-                  <div className="text-[13px] text-[#202124] font-medium">{item.value}</div>
+                  <div className="text-[11px] text-[#86868B]">{item.label}</div>
+                  <div className="text-[13px] text-[#1D1D1F] font-medium">{item.value}</div>
                 </div>
               </div>
             ))}

@@ -82,8 +82,11 @@ export default function Landing() {
               className="flex flex-col items-center gap-4"
             >
               <div
-                className="w-20 h-20 rounded-3xl flex items-center justify-center text-3xl font-bold text-white shadow-2xl"
-                style={{ background: "linear-gradient(135deg, #4285F4, #34A853)" }}
+                className="w-20 h-20 rounded-[22px] flex items-center justify-center text-3xl font-bold text-white shadow-2xl"
+                style={{
+                  background: "linear-gradient(135deg, #BF5AF2 0%, #5E5CE6 50%, #0A84FF 100%)",
+                  boxShadow: "0 8px 32px rgba(94,92,230,0.4), inset 0 1px 0 rgba(255,255,255,0.2)",
+                }}
               >
                 P
               </div>
@@ -197,29 +200,32 @@ export default function Landing() {
             </div>
 
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="text-center relative z-10"
             >
               {/* Time */}
               <div className="mb-8">
-                <div className="text-[72px] font-extralight text-white leading-none tracking-tight" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <div className="text-[72px] font-extralight text-white leading-none tracking-[-0.04em]" style={{ fontVariantNumeric: "tabular-nums" }}>
                   {formatTime(time)}
                 </div>
-                <div className="text-[16px] text-white/50 mt-2 font-light">
+                <div className="text-[15px] text-white/45 mt-2.5 font-light tracking-[-0.01em]">
                   {formatDate(time)}
                 </div>
               </div>
 
               {/* User Avatar */}
               <div className="mb-6">
-                <div className="w-20 h-20 rounded-full mx-auto flex items-center justify-center text-2xl text-white font-light"
-                  style={{ background: "linear-gradient(135deg, #4285F4, #34A853)" }}
+                <div className="w-[72px] h-[72px] rounded-full mx-auto flex items-center justify-center text-2xl text-white font-light"
+                  style={{
+                    background: "linear-gradient(135deg, #8E8E93, #636366)",
+                    boxShadow: "0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)",
+                  }}
                 >
                   G
                 </div>
-                <div className="text-white/70 text-[15px] mt-3 font-medium">Guest</div>
+                <div className="text-white/60 text-[14px] mt-3 font-medium tracking-[-0.01em]">Guest</div>
               </div>
 
               {/* Enter button */}
@@ -227,12 +233,13 @@ export default function Landing() {
                 onClick={handleEnter}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-3 rounded-full text-[14px] font-medium transition-all cursor-pointer"
+                className="px-8 py-2.5 rounded-full text-[13px] font-medium transition-all cursor-pointer"
                 style={{
-                  background: "rgba(255,255,255,0.1)",
-                  border: "1px solid rgba(255,255,255,0.2)",
+                  background: "rgba(255,255,255,0.12)",
+                  border: "0.5px solid rgba(255,255,255,0.2)",
                   color: "white",
                   backdropFilter: "blur(10px)",
+                  letterSpacing: "0.01em",
                 }}
               >
                 Press to Enter PeraOS
@@ -242,7 +249,7 @@ export default function Landing() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.5 }}
-                className="text-white/30 text-[12px] mt-6"
+                className="text-white/25 text-[11px] mt-6"
               >
                 Click anywhere or press the button to start
               </motion.p>

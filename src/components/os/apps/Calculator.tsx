@@ -136,7 +136,7 @@ export function Calculator() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [inputDigit, inputDecimal, performOperation, calculate, clear, backspace, percentage]);
 
-  const buttons: { label: string; action: () => void; span?: number; variant?: string }[] = [
+  const buttons: { label: string; action: () => void; variant?: string }[] = [
     { label: "MC", action: () => setMemory(0), variant: "memory" },
     { label: "MR", action: () => { setDisplay(formatNumber(memory)); setResetNext(true); }, variant: "memory" },
     { label: "M+", action: () => setMemory(memory + parseFloat(display)), variant: "memory" },
@@ -168,15 +168,15 @@ export function Calculator() {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-[#1C1C1E]">
       {/* Display */}
-      <div className="px-5 pt-4 pb-2 text-right">
+      <div className="px-5 pt-3 pb-1 text-right">
         {history && (
-          <div className="text-[12px] text-[#9aa0a6] h-5 truncate">{history}</div>
+          <div className="text-[12px] text-[#8E8E93] h-4 truncate">{history}</div>
         )}
         <div
-          className="text-[36px] font-light text-[#202124] leading-tight truncate"
-          style={{ fontVariantNumeric: "tabular-nums" }}
+          className="text-[36px] font-light text-white leading-tight truncate"
+          style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "-0.02em" }}
         >
           {display}
         </div>
@@ -188,16 +188,16 @@ export function Calculator() {
           <button
             key={i}
             onClick={btn.action}
-            className={`flex items-center justify-center rounded-lg text-[14px] font-medium transition-colors active:scale-95 ${
+            className={`flex items-center justify-center rounded-[6px] text-[14px] font-medium transition-all active:scale-95 ${
               btn.variant === "op"
-                ? "bg-[#E8F0FE] text-[#1A73E8] hover:bg-[#D2E3FC]"
+                ? "bg-[#FF9F0A] text-white hover:bg-[#FFB340]"
                 : btn.variant === "equals"
-                  ? "bg-[#1A73E8] text-white hover:bg-[#1765CC]"
+                  ? "bg-[#FF9F0A] text-white hover:bg-[#FFB340]"
                   : btn.variant === "func"
-                    ? "bg-[#f1f3f4] text-[#202124] hover:bg-[#e8eaed]"
+                    ? "bg-[#505052] text-white hover:bg-[#636366]"
                     : btn.variant === "memory"
-                      ? "bg-[#f1f3f4] text-[#5f6368] hover:bg-[#e8eaed] text-[12px]"
-                      : "bg-white text-[#202124] hover:bg-[#f1f3f4]"
+                      ? "bg-[#505052] text-[#8E8E93] hover:bg-[#636366] text-[11px]"
+                      : "bg-[#333336] text-white hover:bg-[#48484A]"
             }`}
           >
             {btn.label}

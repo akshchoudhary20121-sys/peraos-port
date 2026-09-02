@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 import { useWindowManager, APP_REGISTRY } from "@/components/os/WindowContext";
 import type { WindowState } from "@/types/os";
 import {
@@ -45,6 +45,7 @@ export function Window({ window: win }: WindowProps) {
   } = useWindowManager();
 
   const isFocused = focusedWindowId === win.id;
+  const [isHoveringTitlebar, setIsHoveringTitlebar] = useState(false);
   const windowRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef({
     isDragging: false,
@@ -189,18 +190,21 @@ export function Window({ window: win }: WindowProps) {
 
   const AppComponent = app?.component;
 
+  const showTrafficLightIcons = isHoveringTitlebar && isFocused;
+
   return (
     <div
       ref={windowRef}
-      className="absolute flex flex-col overflow-hidden transition-shadow"
+      className="absolute flex flex-col overflow-hidden"
       style={{
         ...style,
-        borderRadius: win.isMaximized ? 0 : 12,
-        border: `0.5px solid rgba(0,0,0,${isFocused ? 0.12 : 0.06})`,
+        borderRadius: win.isMaximized ? 0 : 10,
+        border: `0.5px solid rgba(0,0,0,${isFocused ? 0.15 : 0.08})`,
         boxShadow: isFocused
-          ? "0 22px 70px 4px rgba(0,0,0,0.28), 0 0 0 0.5px rgba(0,0,0,0.06)"
-          : "0 4px 16px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.04)",
-        background: "rgba(236,236,236,0.95)",
+          ? "0 22px 70px 4px rgba(0,0,0,0.25), 0 0 0 0.5px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.12)"
+          : "0 4px 16px rgba(0,0,0,0.10), 0 0 0 0.5px rgba(0,0,0,0.04)",
+        background: "rgba(246,246,246,0.95)",
+        animation: "windowOpen 0.2s cubic-bezier(0.16,1,0.3,1)",
       }}
       onMouseDown={() => focusWindow(win.id)}
     >
@@ -209,78 +213,83 @@ export function Window({ window: win }: WindowProps) {
         className="flex items-center h-[38px] px-3 shrink-0 select-none relative"
         style={{
           background: isFocused
-            ? "linear-gradient(180deg, rgba(236,236,236,1) 0%, rgba(221,221,221,1) 100%)"
-            : "linear-gradient(180deg, rgba(246,246,246,1) 0%, rgba(234,234,234,1) 100%)",
-          borderBottom: "0.5px solid rgba(0,0,0,0.12)",
+            ? "linear-gradient(180deg, rgba(246,246,246,0.98) 0%, rgba(232,232,232,0.95) 100%)"
+            : "linear-gradient(180deg, rgba(246,246,246,0.95) 0%, rgba(240,240,240,0.92) 100%)",
+          borderBottom: `0.5px solid rgba(0,0,0,${isFocused ? 0.12 : 0.06})`,
         }}
         onMouseDown={handleDragStart}
         onDoubleClick={() => maximizeWindow(win.id)}
+        onMouseEnter={() => setIsHoveringTitlebar(true)}
+        onMouseLeave={() => setIsHoveringTitlebar(false)}
       >
         {/* Traffic Light Buttons */}
         <div
-          className="flex items-center gap-2 mr-3 group"
+          className="flex items-center gap-2 mr-3"
           onMouseDown={(e) => e.stopPropagation()}
         >
           {/* Close */}
           <button
             onClick={() => closeWindow(win.id)}
-            className="w-[13px] h-[13px] rounded-full flex items-center justify-center transition-all"
+            className="w-[12px] h-[12px] rounded-full flex items-center justify-center transition-all"
             style={{
-              background: isFocused ? "#FF5F57" : "#E0E0E0",
-              border: "0.5px solid rgba(0,0,0,0.12)",
+              background: isFocused ? "#FF5F57" : "#DCDCDC",
+              border: `0.5px solid ${isFocused ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.08)"}`,
             }}
             title="Close"
           >
             <svg
-              className="w-[8px] h-[8px] opacity-0 group-hover:opacity-100 transition-opacity"
+              className="w-[7px] h-[7px] transition-opacity"
               viewBox="0 0 12 12"
               fill="none"
-              stroke={isFocused ? "#820005" : "#999"}
-              strokeWidth="1.8"
+              stroke={isFocused ? "#4C0002" : "#808080"}
+              strokeWidth="2"
               strokeLinecap="round"
+              style={{ opacity: showTrafficLightIcons ? 1 : 0 }}
             >
-              <line x1="3" y1="3" x2="9" y2="9" />
-              <line x1="9" y1="3" x2="3" y2="9" />
+              <line x1="3.5" y1="3.5" x2="8.5" y2="8.5" />
+              <line x1="8.5" y1="3.5" x2="3.5" y2="8.5" />
             </svg>
           </button>
           {/* Minimize */}
           <button
             onClick={() => minimizeWindow(win.id)}
-            className="w-[13px] h-[13px] rounded-full flex items-center justify-center transition-all"
+            className="w-[12px] h-[12px] rounded-full flex items-center justify-center transition-all"
             style={{
-              background: isFocused ? "#FDBC40" : "#E0E0E0",
-              border: "0.5px solid rgba(0,0,0,0.12)",
+              background: isFocused ? "#FDBC40" : "#DCDCDC",
+              border: `0.5px solid ${isFocused ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.08)"}`,
             }}
             title="Minimize"
           >
             <svg
-              className="w-[8px] h-[8px] opacity-0 group-hover:opacity-100 transition-opacity"
+              className="w-[7px] h-[7px] transition-opacity"
               viewBox="0 0 12 12"
               fill="none"
-              stroke={isFocused ? "#985700" : "#999"}
-              strokeWidth="1.8"
+              stroke={isFocused ? "#995700" : "#808080"}
+              strokeWidth="2"
               strokeLinecap="round"
+              style={{ opacity: showTrafficLightIcons ? 1 : 0 }}
             >
-              <line x1="2" y1="6" x2="10" y2="6" />
+              <line x1="2.5" y1="6" x2="9.5" y2="6" />
             </svg>
           </button>
           {/* Maximize */}
           <button
             onClick={() => maximizeWindow(win.id)}
-            className="w-[13px] h-[13px] rounded-full flex items-center justify-center transition-all"
+            className="w-[12px] h-[12px] rounded-full flex items-center justify-center transition-all"
             style={{
-              background: isFocused ? "#28C840" : "#E0E0E0",
-              border: "0.5px solid rgba(0,0,0,0.12)",
+              background: isFocused ? "#28C840" : "#DCDCDC",
+              border: `0.5px solid ${isFocused ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.08)"}`,
             }}
             title={win.isMaximized ? "Restore" : "Maximize"}
           >
             <svg
-              className="w-[8px] h-[8px] opacity-0 group-hover:opacity-100 transition-opacity"
+              className="w-[7px] h-[7px] transition-opacity"
               viewBox="0 0 12 12"
               fill="none"
-              stroke={isFocused ? "#006500" : "#999"}
+              stroke={isFocused ? "#006500" : "#808080"}
               strokeWidth="1.8"
               strokeLinecap="round"
+              style={{ opacity: showTrafficLightIcons ? 1 : 0 }}
             >
               {win.isMaximized ? (
                 <>
@@ -304,8 +313,9 @@ export function Window({ window: win }: WindowProps) {
           <span
             className="text-[13px] truncate"
             style={{
-              color: isFocused ? "rgba(0,0,0,0.85)" : "rgba(0,0,0,0.35)",
+              color: isFocused ? "rgba(0,0,0,0.85)" : "rgba(0,0,0,0.3)",
               fontWeight: isFocused ? 500 : 400,
+              letterSpacing: "-0.01em",
             }}
           >
             {win.title}
