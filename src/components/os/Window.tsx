@@ -2,10 +2,6 @@ import { useRef, useCallback, useEffect } from "react";
 import { useWindowManager, APP_REGISTRY } from "@/components/os/WindowContext";
 import type { WindowState } from "@/types/os";
 import {
-  Minus,
-  X,
-  Maximize2,
-  Minimize2,
   Calculator,
   Terminal,
   FileText,
@@ -71,7 +67,6 @@ export function Window({ window: win }: WindowProps) {
   const app = APP_REGISTRY[win.appId];
   const IconComponent = app ? ICON_MAP[app.icon] ?? Info : Info;
 
-  // Drag handlers
   const handleDragStart = useCallback(
     (e: React.MouseEvent) => {
       if (win.isMaximized) return;
@@ -108,7 +103,6 @@ export function Window({ window: win }: WindowProps) {
     [win.id, win.x, win.y, win.isMaximized, focusWindow, updatePosition],
   );
 
-  // Resize handlers
   const handleResizeStart = useCallback(
     (e: React.MouseEvent, direction: string) => {
       if (win.isMaximized) return;
@@ -171,7 +165,6 @@ export function Window({ window: win }: WindowProps) {
     [win, focusWindow, updatePosition, updateSize],
   );
 
-  // Prevent text selection during drag
   useEffect(() => {
     const handleSelectStart = (e: Event) => {
       if (dragRef.current.isDragging || resizeRef.current.isResizing) {
@@ -185,7 +178,7 @@ export function Window({ window: win }: WindowProps) {
   if (win.isMinimized) return null;
 
   const style: React.CSSProperties = win.isMaximized
-    ? { left: 0, top: 40, width: "100%", height: "calc(100% - 40px)", zIndex: win.zIndex }
+    ? { left: 0, top: 32, width: "100%", height: "calc(100% - 32px)", zIndex: win.zIndex }
     : {
         left: win.x,
         top: win.y,
@@ -199,87 +192,148 @@ export function Window({ window: win }: WindowProps) {
   return (
     <div
       ref={windowRef}
-      className={`absolute flex flex-col rounded-xl overflow-hidden transition-shadow duration-150 ${
-        isFocused
-          ? "shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
-          : "shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
-      } ${win.isMaximized ? "" : ""}`}
+      className="absolute flex flex-col overflow-hidden transition-shadow"
       style={{
         ...style,
-        background: "var(--os-window-bg, #ffffff)",
-        border: `1px solid ${isFocused ? "rgba(0,0,0,0.08)" : "rgba(0,0,0,0.04)"}`,
+        borderRadius: win.isMaximized ? 0 : 12,
+        border: `0.5px solid rgba(0,0,0,${isFocused ? 0.12 : 0.06})`,
+        boxShadow: isFocused
+          ? "0 22px 70px 4px rgba(0,0,0,0.28), 0 0 0 0.5px rgba(0,0,0,0.06)"
+          : "0 4px 16px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.04)",
+        background: "rgba(236,236,236,0.95)",
       }}
       onMouseDown={() => focusWindow(win.id)}
     >
-      {/* Title Bar */}
+      {/* macOS Title Bar */}
       <div
-        className="flex items-center h-10 px-3 shrink-0 select-none"
+        className="flex items-center h-[38px] px-3 shrink-0 select-none relative"
         style={{
           background: isFocused
-            ? "var(--os-titlebar-active, #f8f9fa)"
-            : "var(--os-titlebar-inactive, #f1f3f4)",
-          borderBottom: "1px solid rgba(0,0,0,0.06)",
-          cursor: win.isMaximized ? "default" : "default",
+            ? "linear-gradient(180deg, rgba(236,236,236,1) 0%, rgba(221,221,221,1) 100%)"
+            : "linear-gradient(180deg, rgba(246,246,246,1) 0%, rgba(234,234,234,1) 100%)",
+          borderBottom: "0.5px solid rgba(0,0,0,0.12)",
         }}
         onMouseDown={handleDragStart}
         onDoubleClick={() => maximizeWindow(win.id)}
       >
-        <div className="flex items-center gap-2 flex-1 min-w-0">
-          <IconComponent className="w-4 h-4 text-[#5f6368] shrink-0" />
+        {/* Traffic Light Buttons */}
+        <div
+          className="flex items-center gap-2 mr-3 group"
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          {/* Close */}
+          <button
+            onClick={() => closeWindow(win.id)}
+            className="w-[13px] h-[13px] rounded-full flex items-center justify-center transition-all"
+            style={{
+              background: isFocused ? "#FF5F57" : "#E0E0E0",
+              border: "0.5px solid rgba(0,0,0,0.12)",
+            }}
+            title="Close"
+          >
+            <svg
+              className="w-[8px] h-[8px] opacity-0 group-hover:opacity-100 transition-opacity"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke={isFocused ? "#820005" : "#999"}
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            >
+              <line x1="3" y1="3" x2="9" y2="9" />
+              <line x1="9" y1="3" x2="3" y2="9" />
+            </svg>
+          </button>
+          {/* Minimize */}
+          <button
+            onClick={() => minimizeWindow(win.id)}
+            className="w-[13px] h-[13px] rounded-full flex items-center justify-center transition-all"
+            style={{
+              background: isFocused ? "#FDBC40" : "#E0E0E0",
+              border: "0.5px solid rgba(0,0,0,0.12)",
+            }}
+            title="Minimize"
+          >
+            <svg
+              className="w-[8px] h-[8px] opacity-0 group-hover:opacity-100 transition-opacity"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke={isFocused ? "#985700" : "#999"}
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            >
+              <line x1="2" y1="6" x2="10" y2="6" />
+            </svg>
+          </button>
+          {/* Maximize */}
+          <button
+            onClick={() => maximizeWindow(win.id)}
+            className="w-[13px] h-[13px] rounded-full flex items-center justify-center transition-all"
+            style={{
+              background: isFocused ? "#28C840" : "#E0E0E0",
+              border: "0.5px solid rgba(0,0,0,0.12)",
+            }}
+            title={win.isMaximized ? "Restore" : "Maximize"}
+          >
+            <svg
+              className="w-[8px] h-[8px] opacity-0 group-hover:opacity-100 transition-opacity"
+              viewBox="0 0 12 12"
+              fill="none"
+              stroke={isFocused ? "#006500" : "#999"}
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            >
+              {win.isMaximized ? (
+                <>
+                  <polyline points="2,8 2,2 8,2" />
+                  <polyline points="10,4 10,10 4,10" />
+                </>
+              ) : (
+                <>
+                  <polyline points="2,4 2,2 4,2" />
+                  <polyline points="8,2 10,2 10,4" />
+                  <polyline points="10,8 10,10 8,10" />
+                  <polyline points="4,10 2,10 2,8" />
+                </>
+              )}
+            </svg>
+          </button>
+        </div>
+
+        {/* Window Title (centered) */}
+        <div className="flex-1 flex items-center justify-center">
           <span
-            className="text-[13px] font-medium truncate"
-            style={{ color: isFocused ? "#202124" : "#5f6368" }}
+            className="text-[13px] truncate"
+            style={{
+              color: isFocused ? "rgba(0,0,0,0.85)" : "rgba(0,0,0,0.35)",
+              fontWeight: isFocused ? 500 : 400,
+            }}
           >
             {win.title}
           </span>
         </div>
 
-        {/* Window Controls */}
-        <div className="flex items-center gap-1 ml-2" onMouseDown={(e) => e.stopPropagation()}>
-          <button
-            onClick={() => minimizeWindow(win.id)}
-            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-black/5 transition-colors"
-            title="Minimize"
-          >
-            <Minus className="w-3.5 h-3.5 text-[#5f6368]" />
-          </button>
-          <button
-            onClick={() => maximizeWindow(win.id)}
-            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-black/5 transition-colors"
-            title={win.isMaximized ? "Restore" : "Maximize"}
-          >
-            {win.isMaximized ? (
-              <Minimize2 className="w-3.5 h-3.5 text-[#5f6368]" />
-            ) : (
-              <Maximize2 className="w-3.5 h-3.5 text-[#5f6368]" />
-            )}
-          </button>
-          <button
-            onClick={() => closeWindow(win.id)}
-            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-red-500 hover:text-white transition-colors group"
-            title="Close"
-          >
-            <X className="w-3.5 h-3.5 text-[#5f6368] group-hover:text-white" />
-          </button>
-        </div>
+        {/* Spacer to balance traffic lights */}
+        <div className="w-[54px]" />
       </div>
 
       {/* App Content */}
-      <div className="flex-1 overflow-hidden relative">
-        {AppComponent ? <AppComponent windowId={win.id} /> : (
-          <div className="flex items-center justify-center h-full text-[#5f6368] text-sm">
+      <div className="flex-1 overflow-hidden relative" style={{ background: "#fff" }}>
+        {AppComponent ? (
+          <AppComponent windowId={win.id} />
+        ) : (
+          <div className="flex items-center justify-center h-full text-gray-400 text-sm">
             No content
           </div>
         )}
       </div>
 
-      {/* Resize Handles (only when not maximized) */}
+      {/* Resize Handles */}
       {!win.isMaximized && (
         <>
-          <div className="absolute top-0 left-0 right-0 h-1 cursor-n-resize" onMouseDown={(e) => handleResizeStart(e, "n")} />
-          <div className="absolute bottom-0 left-0 right-0 h-1 cursor-s-resize" onMouseDown={(e) => handleResizeStart(e, "s")} />
-          <div className="absolute top-0 bottom-0 left-0 w-1 cursor-w-resize" onMouseDown={(e) => handleResizeStart(e, "w")} />
-          <div className="absolute top-0 bottom-0 right-0 w-1 cursor-e-resize" onMouseDown={(e) => handleResizeStart(e, "e")} />
+          <div className="absolute top-0 left-0 right-0 h-[4px] cursor-ns-resize" onMouseDown={(e) => handleResizeStart(e, "n")} />
+          <div className="absolute bottom-0 left-0 right-0 h-[4px] cursor-ns-resize" onMouseDown={(e) => handleResizeStart(e, "s")} />
+          <div className="absolute top-0 bottom-0 left-0 w-[4px] cursor-ew-resize" onMouseDown={(e) => handleResizeStart(e, "w")} />
+          <div className="absolute top-0 bottom-0 right-0 w-[4px] cursor-ew-resize" onMouseDown={(e) => handleResizeStart(e, "e")} />
           <div className="absolute top-0 left-0 w-3 h-3 cursor-nw-resize" onMouseDown={(e) => handleResizeStart(e, "nw")} />
           <div className="absolute top-0 right-0 w-3 h-3 cursor-ne-resize" onMouseDown={(e) => handleResizeStart(e, "ne")} />
           <div className="absolute bottom-0 left-0 w-3 h-3 cursor-sw-resize" onMouseDown={(e) => handleResizeStart(e, "sw")} />
