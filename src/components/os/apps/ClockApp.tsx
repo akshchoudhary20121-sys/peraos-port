@@ -25,8 +25,8 @@ export function ClockApp() {
             onClick={() => setTab(t.id)}
             className={`flex-1 flex items-center justify-center gap-2 py-3 text-[13px] font-medium transition-colors border-b-2 ${
               tab === t.id
-                ? "text-[#1A73E8] border-[#1A73E8]"
-                : "text-[#5f6368] border-transparent hover:text-[#202124]"
+                ? "text-[#FF2D55] border-[#FF2D55]"
+                : "text-[#86868B] border-transparent hover:text-[#1D1D1F]"
             }`}
           >
             <t.icon className="w-4 h-4" />
@@ -64,7 +64,7 @@ function ClockView({ time }: { time: Date }) {
       <div className="relative w-48 h-48">
         <svg viewBox="0 0 200 200" className="w-full h-full">
           {/* Clock face */}
-          <circle cx="100" cy="100" r="95" fill="white" stroke="#e8eaed" strokeWidth="2" />
+          <circle cx="100" cy="100" r="95" fill="white" stroke="#E5E5EA" strokeWidth="1.5" />
           {/* Hour markers */}
           {Array.from({ length: 12 }).map((_, i) => {
             const angle = (i * 30 * Math.PI) / 180;
@@ -72,7 +72,7 @@ function ClockView({ time }: { time: Date }) {
             const y1 = 100 - 82 * Math.cos(angle);
             const x2 = 100 + 88 * Math.sin(angle);
             const y2 = 100 - 88 * Math.cos(angle);
-            return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#202124" strokeWidth="2" strokeLinecap="round" />;
+            return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#1D1D1F" strokeWidth="2" strokeLinecap="round" />;
           })}
           {/* Minute markers */}
           {Array.from({ length: 60 }).map((_, i) => {
@@ -82,40 +82,40 @@ function ClockView({ time }: { time: Date }) {
             const y1 = 100 - 85 * Math.cos(angle);
             const x2 = 100 + 88 * Math.sin(angle);
             const y2 = 100 - 88 * Math.cos(angle);
-            return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#dadce0" strokeWidth="1" />;
+            return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#E5E5EA" strokeWidth="0.8" />;
           })}
           {/* Hour hand */}
           <line
             x1="100" y1="100"
             x2={100 + 45 * Math.sin((hourDeg * Math.PI) / 180)}
             y2={100 - 45 * Math.cos((hourDeg * Math.PI) / 180)}
-            stroke="#202124" strokeWidth="3" strokeLinecap="round"
+            stroke="#1D1D1F" strokeWidth="3" strokeLinecap="round"
           />
           {/* Minute hand */}
           <line
             x1="100" y1="100"
             x2={100 + 65 * Math.sin((minuteDeg * Math.PI) / 180)}
             y2={100 - 65 * Math.cos((minuteDeg * Math.PI) / 180)}
-            stroke="#202124" strokeWidth="2" strokeLinecap="round"
+            stroke="#1D1D1F" strokeWidth="2" strokeLinecap="round"
           />
           {/* Second hand */}
           <line
             x1="100" y1="100"
             x2={100 + 70 * Math.sin((secondDeg * Math.PI) / 180)}
             y2={100 - 70 * Math.cos((secondDeg * Math.PI) / 180)}
-            stroke="#EA4335" strokeWidth="1" strokeLinecap="round"
+            stroke="#FF2D55" strokeWidth="1" strokeLinecap="round"
           />
           {/* Center dot */}
-          <circle cx="100" cy="100" r="4" fill="#EA4335" />
+          <circle cx="100" cy="100" r="3.5" fill="#FF2D55" />
         </svg>
       </div>
 
       {/* Digital time */}
       <div className="text-center">
-        <div className="text-[32px] font-light text-[#202124]" style={{ fontVariantNumeric: "tabular-nums" }}>
+        <div className="text-[32px] font-extralight text-[#1D1D1F]" style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "-0.02em" }}>
           {formatDigital(time)}
         </div>
-        <div className="text-[13px] text-[#5f6368] mt-1">{formatDate(time)}</div>
+        <div className="text-[13px] text-[#86868B] mt-1">{formatDate(time)}</div>
       </div>
     </div>
   );
@@ -159,7 +159,7 @@ function StopwatchView() {
 
   return (
     <div className="flex flex-col items-center h-full p-6">
-      <div className="text-[48px] font-light text-[#202124] my-8" style={{ fontVariantNumeric: "tabular-nums" }}>
+      <div className="text-[48px] font-extralight text-[#1D1D1F] my-8" style={{ fontVariantNumeric: "tabular-nums", letterSpacing: "-0.03em" }}>
         {formatMs(elapsed)}
       </div>
 
@@ -173,14 +173,14 @@ function StopwatchView() {
         </button>
         <button
           onClick={() => setRunning(!running)}
-          className="px-6 py-2.5 rounded-full text-[13px] font-medium bg-[#1A73E8] text-white hover:bg-[#1765CC] transition-colors"
+          className="px-6 py-2.5 rounded-full text-[13px] font-medium bg-[#007AFF] text-white hover:bg-[#0A84FF] transition-colors"
         >
           {running ? "Pause" : "Start"}
         </button>
         <button
           onClick={handleReset}
           disabled={elapsed === 0}
-          className="px-6 py-2.5 rounded-full text-[13px] font-medium bg-[#f1f3f4] text-[#202124] hover:bg-[#e8eaed] transition-colors disabled:opacity-40"
+          className="px-6 py-2.5 rounded-full text-[13px] font-medium bg-[#F2F2F7] text-[#1D1D1F] hover:bg-[#E5E5EA] transition-colors disabled:opacity-40"
         >
           Reset
         </button>
@@ -188,11 +188,11 @@ function StopwatchView() {
 
       {laps.length > 0 && (
         <div className="w-full flex-1 overflow-y-auto">
-          <div className="text-[12px] font-medium text-[#5f6368] mb-2">Laps</div>
+          <div className="text-[12px] font-semibold text-[#86868B] mb-2">Laps</div>
           {laps.map((lap, i) => (
-            <div key={i} className="flex justify-between py-2 border-b border-[#f1f3f4] text-[13px]">
-              <span className="text-[#5f6368]">Lap {laps.length - i}</span>
-              <span className="text-[#202124]" style={{ fontVariantNumeric: "tabular-nums" }}>
+            <div key={i} className="flex justify-between py-2 border-b border-[#E5E5EA] text-[13px]">
+              <span className="text-[#86868B]">Lap {laps.length - i}</span>
+              <span className="text-[#1D1D1F]" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {formatMs(i === 0 ? lap - (laps[1] ?? 0) : lap - (laps[i + 1] ?? 0))}
               </span>
             </div>
