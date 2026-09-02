@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuthActions } from "@convex-dev/auth/react";
 
 type BootPhase = "black" | "logo" | "loading" | "welcome" | "lock";
 
@@ -9,7 +9,14 @@ export default function Landing() {
   const [phase, setPhase] = useState<BootPhase>("black");
   const [time, setTime] = useState(new Date());
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading: authLoading, signIn } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let signIn: (...args: any[]) => Promise<any> = async () => ({});
+  try {
+    const actions = useAuthActions();
+    signIn = actions.signIn;
+  } catch {
+    // Convex not configured
+  }
 
   // Boot sequence
   useEffect(() => {
@@ -29,22 +36,15 @@ export default function Landing() {
     }
   }, [phase]);
 
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (!authLoading && isAuthenticated) {
-      navigate("/dashboard");
-    }
-  }, [authLoading, isAuthenticated, navigate]);
-
   const handleEnter = useCallback(async () => {
+    // Try anonymous sign-in, but navigate either way
     try {
       await signIn("anonymous");
-      navigate("/dashboard");
     } catch {
-      // If anonymous fails, still navigate (for demo purposes)
-      navigate("/dashboard");
+      // Convex not configured — still navigate to the desktop
     }
-  }, [signIn, navigate]);
+    navigate("/dashboard");
+  }, [navigate, signIn]);
 
   const formatTime = (d: Date) =>
     d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: false });
@@ -191,7 +191,7 @@ export default function Landing() {
                 style={{ background: "radial-gradient(circle, #4285F4 0%, transparent 70%)" }}
               />
               <div
-                className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full opacity-8"
+                className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.08]"
                 style={{ background: "radial-gradient(circle, #34A853 0%, transparent 70%)" }}
               />
             </div>
