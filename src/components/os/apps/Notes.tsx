@@ -14,7 +14,7 @@ function loadNotes(): Note[] {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     if (data) return JSON.parse(data);
-  } catch {}
+  } catch { /* ignore parse errors, use defaults */ }
   return [
     {
       id: "welcome",

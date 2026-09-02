@@ -38,6 +38,20 @@ export function MusicPlayer() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const track = TRACKS[currentTrack];
 
+  const nextTrack = () => {
+    setCurrentTrack((prev) => (prev + 1) % TRACKS.length);
+    setProgress(0);
+  };
+
+  const prevTrack = () => {
+    if (progress > 3) {
+      setProgress(0);
+    } else {
+      setCurrentTrack((prev) => (prev - 1 + TRACKS.length) % TRACKS.length);
+      setProgress(0);
+    }
+  };
+
   useEffect(() => {
     if (isPlaying) {
       intervalRef.current = setInterval(() => {
@@ -55,20 +69,6 @@ export function MusicPlayer() {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [isPlaying, track.duration, repeat]);
-
-  const nextTrack = () => {
-    setCurrentTrack((prev) => (prev + 1) % TRACKS.length);
-    setProgress(0);
-  };
-
-  const prevTrack = () => {
-    if (progress > 3) {
-      setProgress(0);
-    } else {
-      setCurrentTrack((prev) => (prev - 1 + TRACKS.length) % TRACKS.length);
-      setProgress(0);
-    }
-  };
 
   const toggleLike = (id: string) => {
     setLiked((prev) => {

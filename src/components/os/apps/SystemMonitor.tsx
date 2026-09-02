@@ -56,7 +56,7 @@ function UsageBar({ label, value, icon: Icon, color }: { label: string; value: n
 export function SystemMonitor() {
   const [cpu, setCpu] = useState(42);
   const [ram, setRam] = useState(58);
-  const [disk, setDisk] = useState(34);
+  const [disk] = useState(34);
   const [network, setNetwork] = useState(12);
   const [processes, setProcesses] = useState<ProcessInfo[]>(() =>
     PROCESS_NAMES.map((name, i) => ({

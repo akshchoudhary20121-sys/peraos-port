@@ -3,7 +3,6 @@ import {
   Palette,
   Monitor,
   Info,
-  ChevronRight,
   Moon,
   Sun,
   Bell,

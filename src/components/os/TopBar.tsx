@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useWindowManager } from "@/components/os/WindowContext";
-import { Wifi, Battery, BatteryCharging, Volume2, Search } from "lucide-react";
+import { Wifi, Battery, Volume2 } from "lucide-react";
 
 export function TopBar() {
-  const { focusedWindowId, windows, startMenuOpen, setStartMenuOpen } =
+  const { focusedWindowId, windows, setStartMenuOpen } =
     useWindowManager();
   const [time, setTime] = useState(new Date());
 

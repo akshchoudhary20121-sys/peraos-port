@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from "react";
-import { Delete } from "lucide-react";
 
 export function Calculator() {
   const [display, setDisplay] = useState("0");

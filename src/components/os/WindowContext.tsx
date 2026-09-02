@@ -3,7 +3,6 @@ import {
   useContext,
   useReducer,
   useCallback,
-  useRef,
   type ReactNode,
 } from "react";
 import type { WindowState, AppConfig, WindowManagerAction } from "@/types/os";
@@ -246,8 +245,6 @@ export function WindowProvider({ children }: { children: ReactNode }) {
       action === "toggle" ? false : action,
     false,
   );
-  const maxZRef = useRef(0);
-
   const openWindow = useCallback((appId: string) => {
     setStartMenuOpen(false);
     dispatch({ type: "OPEN_WINDOW", appId });

@@ -1,9 +1,8 @@
-import { useRef, useCallback, useEffect, useState } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import { useWindowManager, APP_REGISTRY } from "@/components/os/WindowContext";
 import type { WindowState } from "@/types/os";
 import {
   Minus,
-  Square,
   X,
   Maximize2,
   Minimize2,

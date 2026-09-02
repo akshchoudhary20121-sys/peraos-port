@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Clock, Timer, History, Play, Pause, RotateCcw } from "lucide-react";
+import { Clock, Timer } from "lucide-react";
 
 type Tab = "clock" | "stopwatch" | "timer";
 

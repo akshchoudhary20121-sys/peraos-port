@@ -53,8 +53,10 @@ export function StartMenu() {
 
   useEffect(() => {
     if (startMenuOpen) {
-      setSearch("");
-      setTimeout(() => inputRef.current?.focus(), 100);
+      queueMicrotask(() => {
+        setSearch("");
+        inputRef.current?.focus();
+      });
     }
   }, [startMenuOpen]);
 

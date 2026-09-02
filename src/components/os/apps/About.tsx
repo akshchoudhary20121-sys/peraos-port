@@ -1,4 +1,4 @@
-import { Globe, Github, Heart, Monitor, Cpu, MemoryStick, HardDrive } from "lucide-react";
+import { Heart, Monitor, Cpu, MemoryStick } from "lucide-react";
 
 export function About() {
   const systemInfo = [
