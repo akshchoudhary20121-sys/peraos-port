@@ -155,7 +155,7 @@ export function StartMenu() {
                     boxShadow: "0 1px 4px rgba(0,0,0,0.15), inset 0 0.5px 0 rgba(255,255,255,0.2)",
                   }}
                 >
-                  <Icon className="w-[20px] h-[20px] text-white" strokeWidth={1.7} />
+                  <Icon className="w-[20px] h-[20px] text-white" />
                 </div>
                 <span className="text-[10.5px] text-[#1D1D1F] leading-tight text-center">
                   {app.title}

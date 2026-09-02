@@ -91,7 +91,7 @@ export function Desktop() {
                   boxShadow: "0 2px 8px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.2)",
                 }}
               >
-                <Icon className="w-6 h-6 text-white" strokeWidth={1.7} />
+                <Icon className="w-6 h-6 text-white" />
               </div>
               <span className="text-[11px] text-white font-medium leading-tight text-center drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] w-full truncate">
                 {app.title}

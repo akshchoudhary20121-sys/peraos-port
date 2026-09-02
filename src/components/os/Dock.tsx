@@ -176,7 +176,7 @@ export function Dock() {
                     boxShadow: iconStyle.shadow,
                   }}
                 >
-                  <Icon className="w-[25px] h-[25px] text-white" strokeWidth={1.7} />
+                  <Icon className="w-[25px] h-[25px] text-white" />
                 </div>
                 {/* Running indicator dot */}
                 {isRunning && (
